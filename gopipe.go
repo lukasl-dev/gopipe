@@ -27,6 +27,7 @@ package gopipe
 
 import (
 	"errors"
+	"io"
 	"os"
 )
 
@@ -44,4 +45,18 @@ func Available() (bool, error) {
 		return false, err
 	}
 	return info.Mode()&os.ModeNamedPipe != 0, nil
+}
+
+// Read returns the content of the shell pipe if one
+// was used.
+// If this is not the case, ErrNotAvailable is returned.
+func Read() ([]byte, error) {
+	ok, err := Available()
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, ErrNotAvailable
+	}
+	return io.ReadAll(os.Stdin)
 }
