@@ -66,3 +66,9 @@ func Read() ([]byte, error) {
 func Write(b []byte) (int, error) {
 	return os.Stdout.Write(b)
 }
+
+// WriteString writes the passed string to the output
+// pipe.
+func WriteString(s string) (int, error) {
+	return os.Stdout.WriteString(s)
+}
