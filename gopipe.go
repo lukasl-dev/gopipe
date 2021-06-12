@@ -27,6 +27,7 @@ package gopipe
 
 import (
 	"errors"
+	"os"
 )
 
 var (
@@ -34,3 +35,13 @@ var (
 	// was used.
 	ErrNotAvailable = errors.New("pipe is not available")
 )
+
+// Available returns true whenever a shell pipe was
+// used.
+func Available() (bool, error) {
+	info, err := os.Stdin.Stat()
+	if err != nil {
+		return false, err
+	}
+	return info.Mode()&os.ModeNamedPipe != 0, nil
+}
