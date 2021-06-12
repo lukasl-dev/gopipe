@@ -37,6 +37,18 @@ var (
 	ErrNotAvailable = errors.New("pipe is not available")
 )
 
+// namedPipe returns true whenever a named pipe was
+// used.
+func namedPipe(info os.FileInfo) bool {
+	return info.Mode()&os.ModeNamedPipe != 0
+}
+
+// charDevice returns true whenever os.Stdin points
+// to a ModeCharDevice (terminal).
+func charDevice(info os.FileInfo) bool {
+	return info.Mode()&os.ModeCharDevice == 0
+}
+
 // Available returns true whenever a shell pipe was
 // used.
 func Available() (bool, error) {
@@ -44,7 +56,7 @@ func Available() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return info.Mode()&os.ModeNamedPipe != 0, nil
+	return namedPipe(info) && charDevice(info), nil
 }
 
 // Read returns the content of the shell pipe if one
