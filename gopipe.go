@@ -60,3 +60,9 @@ func Read() ([]byte, error) {
 	}
 	return io.ReadAll(os.Stdin)
 }
+
+// Write writes the passed bytes to the output shell
+// pipe.
+func Write(b []byte) (int, error) {
+	return os.Stdout.Write(b)
+}
